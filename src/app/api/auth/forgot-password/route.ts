@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { users, User, saveUsers } from "@/lib/user";
+import { User, updateUsers, loadUsers } from "@/lib/user";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   try {
     const { email, newPassword } = await request.json();
-
+    const users = await loadUsers();
     // Find user
-    const userIndex = users.findIndex((user) => user.email === email);
+    const userIndex = users.findIndex((user: User) => user.email === email);
     if (userIndex === -1) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       // Update in users array and save
       const updatedUsers = [...users];
       updatedUsers[userIndex] = updatedUser;
-      saveUsers(updatedUsers);
+      await updateUsers(updatedUser);
 
       return NextResponse.json({
         message: "Password updated successfully",

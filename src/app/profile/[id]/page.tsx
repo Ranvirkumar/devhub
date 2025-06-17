@@ -49,7 +49,7 @@ export default function ProfilePage({
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [id]);
+  }, [id, developers, blogPosts]);
 
   if (isLoading) {
     return (

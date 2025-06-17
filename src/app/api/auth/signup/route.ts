@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { users, saveUsers } from "@/lib/user";
+import { loadUsers, saveUsers, User } from "@/lib/user";
 import bcrypt from "bcryptjs";
 export type UserWithOptionalPassword = {
   id: string;
@@ -11,9 +11,9 @@ export type UserWithOptionalPassword = {
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
-
+    const users = await loadUsers();
     // Check if user already exists
-    if (users.some((user) => user.email === email)) {
+    if (users.some((user: User) => user.email === email)) {
       return NextResponse.json(
         { error: "User already exists" },
         { status: 400 }
@@ -37,10 +37,7 @@ export async function POST(request: Request) {
 
     try {
       // Add to users array and save
-      const updatedUsers = [...users, newUser];
-      saveUsers(updatedUsers);
-
-      // Return user data without password
+      await saveUsers(newUser);
 
       // Return user data (excluding password)
       const userWithoutPassword = { ...newUser } as UserWithOptionalPassword;

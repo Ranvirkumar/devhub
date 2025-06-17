@@ -39,7 +39,6 @@ export default function NewBlogPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState("write");
-
   const {
     register,
     handleSubmit,
@@ -69,11 +68,10 @@ export default function NewBlogPage() {
     try {
       // Simulate API call with the form data
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const response = await createBlog({
+      await createBlog({
         ...data,
         authorId: user?.id || "",
       });
-      console.log("response====>", response);
       toast({
         title: "Blog post created",
         description: "Your blog post has been created successfully.",

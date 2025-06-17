@@ -2,40 +2,71 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+
+const schema = yup.object({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  newPassword: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("New password is required"),
+});
+
+type FormData = yup.InferType<typeof schema>;
 
 export default function ForgotPasswordForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-    setIsLoading(true);
+  const form = useForm<FormData>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      email: "",
+      newPassword: "",
+    },
+  });
 
+  const onSubmit = async (data: FormData) => {
+    setError(null);
+    setSuccess(null);
+    setIsLoading(true);
     try {
       const response = await fetch("/api/auth/forgot-password", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, newPassword }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-
-      const data = await response.json();
-
+      const resData = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Something went wrong");
+        throw new Error(resData.error || "Something went wrong");
       }
-
       setSuccess("Password updated successfully!");
-      // Redirect to sign in page after 2 seconds
       setTimeout(() => {
-        router.push("/signin");
+        router.push("/auth/signin");
       }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -45,57 +76,74 @@ export default function ForgotPasswordForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="newPassword"
-            className="block text-sm font-medium text-gray-700"
-          >
-            New Password
-          </label>
-          <input
-            type="password"
-            id="newPassword"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            required
-            minLength={6}
-          />
-        </div>
-
-        {error && <div className="text-red-500 text-sm">{error}</div>}
-
-        {success && <div className="text-green-500 text-sm">{success}</div>}
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
-            isLoading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-        >
-          {isLoading ? "Updating..." : "Reset Password"}
-        </button>
-      </form>
-    </div>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl">Reset Password</CardTitle>
+        <CardDescription>
+          Enter your email and new password to reset your account password
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            {success && (
+              <Alert>
+                <AlertDescription>{success}</AlertDescription>
+              </Alert>
+            )}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="name@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Enter new password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Reset Password"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="flex flex-col"></CardFooter>
+    </Card>
   );
 }

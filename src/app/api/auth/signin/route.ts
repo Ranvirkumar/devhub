@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { users } from "@/lib/user";
+import { loadUsers, User } from "@/lib/user";
 import bcrypt from "bcryptjs";
 
 export type UserWithOptionalPassword = {
@@ -13,9 +13,9 @@ export type UserWithOptionalPassword = {
 export async function POST(request: Request) {
   try {
     const { email, password: userPassword } = await request.json();
-
+    const users = await loadUsers();
     // Check if user exists
-    const user = users.find((u) => u.email === email);
+    const user = users.find((u: User) => u.email === email);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

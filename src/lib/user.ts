@@ -1,6 +1,5 @@
-import fs from "fs";
-import path from "path";
-
+export const baseUrl =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 export interface User {
   id: string;
   name: string;
@@ -9,38 +8,12 @@ export interface User {
   avatar: string;
 }
 
-const DB_FILE = path.join(process.cwd(), "db.json");
-
-// Read the entire database
-export const readDB = () => {
-  try {
-    const data = fs.readFileSync(DB_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error reading db.json:", error);
-    return { users: [] };
-  }
-};
-
-// Write to the database
-export const writeDB = (data: User[]) => {
-  try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-    console.log("Database updated successfully");
-  } catch (error) {
-    console.error("Error writing to db.json:", error);
-  }
-};
-
-// Initialize users array
-export let users: User[] = [];
-
 // Function to load users
-export const loadUsers = () => {
+export const loadUsers = async () => {
   try {
-    const db = readDB();
-    users = db.users;
-    return users;
+    const data = await fetch(`${baseUrl}/users`);
+    const resData = await data.json();
+    return resData;
   } catch (error) {
     console.error("Error loading users:", error);
     return [];
@@ -48,12 +21,16 @@ export const loadUsers = () => {
 };
 
 // Function to save users
-export const saveUsers = (usersToSave: User[]) => {
+export const saveUsers = async (usersToSave: User) => {
   try {
-    const db = readDB();
-    db.users = usersToSave;
-    writeDB(db);
-    users = usersToSave;
+    await fetch(`${baseUrl}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(usersToSave),
+    });
+    await loadUsers();
     return true;
   } catch (error) {
     console.error("Error saving users:", error);
@@ -61,5 +38,19 @@ export const saveUsers = (usersToSave: User[]) => {
   }
 };
 
-// Load users on module initialization
-loadUsers();
+export const updateUsers = async (usersToUpdate: User) => {
+  try {
+    await fetch(`${baseUrl}/users/${usersToUpdate.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(usersToUpdate),
+    });
+    await loadUsers(); // Assign the returned users array
+    return true;
+  } catch (error) {
+    console.error("Error updating users:", error);
+    throw error;
+  }
+};
