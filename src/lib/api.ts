@@ -1,4 +1,4 @@
-import { useData, baseUrl } from "@/lib/data";
+import { baseUrl } from "@/lib/data";
 import type { BlogPost, Comment } from "@/types";
 
 // Helper function to generate a unique ID
@@ -90,20 +90,6 @@ export async function deleteBlog(id: string, blogPosts: BlogPost[]) {
     method: "DELETE",
   });
   return { success: true };
-}
-
-// Comment API
-export async function getCommentsByBlogId(blogId: string) {
-  const { comments } = useData();
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  return comments
-    .filter((comment) => comment.blogPostId === blogId)
-    .sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
 }
 
 export async function createComment(data: {

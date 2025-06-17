@@ -23,7 +23,7 @@ export const readDB = () => {
 };
 
 // Write to the database
-export const writeDB = (data: any) => {
+export const writeDB = (data: User[]) => {
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
     console.log("Database updated successfully");

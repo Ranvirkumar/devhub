@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useData } from "@/lib/data";
-import type { BlogPost, Developer } from "@/types";
+import type { Developer } from "@/types";
 import {
   Card,
   CardContent,

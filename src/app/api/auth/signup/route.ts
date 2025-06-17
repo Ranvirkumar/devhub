@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { users, saveUsers } from "@/lib/user";
 import bcrypt from "bcryptjs";
-
+export type UserWithOptionalPassword = {
+  id: string;
+  name: string;
+  email: string;
+  password?: string;
+  avatar?: string;
+};
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
@@ -35,7 +41,10 @@ export async function POST(request: Request) {
       saveUsers(updatedUsers);
 
       // Return user data without password
-      const { password: _, ...userWithoutPassword } = newUser;
+
+      // Return user data (excluding password)
+      const userWithoutPassword = { ...newUser } as UserWithOptionalPassword;
+      delete userWithoutPassword.password;
       return NextResponse.json({
         user: userWithoutPassword,
         token: "mock-jwt-token", // In a real app, generate a proper JWT

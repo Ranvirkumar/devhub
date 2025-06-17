@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { users } from "@/lib/user";
 import bcrypt from "bcryptjs";
 
-type UserWithOptionalPassword = {
+export type UserWithOptionalPassword = {
   id: string;
   name: string;
   email: string;
