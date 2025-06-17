@@ -1,0 +1,119 @@
+{
+  "developers": [
+    {
+      "id": "1",
+      "name": "Alice Smith",
+      "email": "alice@example.com",
+      "avatar": "https://randomuser.me/api/portraits/women/1.jpg",
+      "bio": "Frontend developer passionate about React and UI/UX.",
+      "skills": [
+        "React",
+        "JavaScript",
+        "CSS"
+      ],
+      "socialLinks": {
+        "github": "https://github.com/alicesmith",
+        "twitter": "https://twitter.com/alicesmith",
+        "linkedin": "https://linkedin.com/in/alicesmith",
+        "website": "https://alicesmith.dev"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Bob Johnson",
+      "email": "bob@example.com",
+      "avatar": "https://randomuser.me/api/portraits/men/2.jpg",
+      "bio": "Fullstack engineer and Node.js enthusiast.",
+      "skills": [
+        "Node.js",
+        "Express",
+        "MongoDB"
+      ],
+      "socialLinks": {
+        "github": "https://github.com/bobjohnson",
+        "twitter": "https://twitter.com/bobjohnson",
+        "linkedin": "https://linkedin.com/in/bobjohnson",
+        "website": "https://bobjohnson.dev"
+      }
+    }
+  ],
+  "blogs": [
+    {
+      "id": "101",
+      "title": "Getting Started with React",
+      "content": "# React\nReact is a JavaScript library for building user interfaces...",
+      "excerpt": "React is a JavaScript library for building UIs...",
+      "authorId": "1",
+      "createdAt": "2024-06-01T10:00:00Z",
+      "updatedAt": "2024-06-01T10:00:00Z"
+    },
+    {
+      "id": "102",
+      "title": "Node.js Best Practices",
+      "content": "# Node.js\nNode.js is a runtime for JavaScript on the server...",
+      "excerpt": "Node.js is a runtime for JavaScript on the server...",
+      "authorId": "2",
+      "createdAt": "2024-06-02T12:00:00Z",
+      "updatedAt": "2024-06-02T12:00:00Z"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1001",
+      "content": "Great intro to React!",
+      "authorId": "2",
+      "blogPostId": "101",
+      "createdAt": "2024-06-03T09:00:00Z"
+    },
+    {
+      "id": "1002",
+      "content": "Thanks for the Node.js tips!",
+      "authorId": "1",
+      "blogPostId": "102",
+      "createdAt": "2024-06-03T10:00:00Z"
+    },
+    {
+      "id": "comment-1750144759108",
+      "content": "Hello data",
+      "authorId": "2",
+      "authorname": "super",
+      "authorAvatar": "https://randomuser.me/api/portraits/women/2.jpg",
+      "blogPostId": "101",
+      "createdAt": "2025-06-17T07:19:19.108Z"
+    },
+    {
+      "id": "comment-1750148938053",
+      "content": "Hello",
+      "authorId": "2",
+      "authorname": "super",
+      "authorAvatar": "https://randomuser.me/api/portraits/women/2.jpg",
+      "blogPostId": "102",
+      "createdAt": "2025-06-17T08:28:58.053Z"
+    },
+    {
+      "id": "comment-1750149005483",
+      "content": "what are you doing",
+      "authorId": "2",
+      "authorname": "super",
+      "authorAvatar": "https://randomuser.me/api/portraits/women/2.jpg",
+      "blogPostId": "101",
+      "createdAt": "2025-06-17T08:30:05.483Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Ranvir",
+      "email": "ranvir.kumar+master1@ongraph.com",
+      "password": "$2b$10$EN.bwGhttVaSlCQXJQ1qZOyLm5k0IZ/u2dDqXMEfoUz643ppZsPDC",
+      "avatar": "https://randomuser.me/api/portraits/men/1.jpg"
+    },
+    {
+      "id": "2",
+      "name": "super",
+      "email": "ranvir.kumar+master@ongraph.com",
+      "password": "$2b$10$7aJbODiqm5Vri/7wXel8vO8rVWY4Uceo50n1xTJfO41xX146ZZlJK",
+      "avatar": "https://randomuser.me/api/portraits/women/2.jpg"
+    }
+  ]
+}
